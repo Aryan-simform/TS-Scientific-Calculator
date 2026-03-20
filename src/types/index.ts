@@ -51,4 +51,8 @@ export interface CalcUIElements {
   clearHistoryBtn: HTMLButtonElement;
 }
 
-
+export interface CalculatorState {
+  current: string;
+  expression: string;
+  clearFlag: boolean;
+}
