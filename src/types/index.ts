@@ -56,3 +56,5 @@ export interface CalculatorState {
   expression: string;
   clearFlag: boolean;
 }
+
+export type ScientificOp = UnaryFunction | Constant;

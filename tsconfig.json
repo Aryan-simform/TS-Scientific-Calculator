@@ -47,7 +47,8 @@
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,
     "incremental": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+   // "noEmitOnError": false
   },
   "include": [
     "src/**/*"
