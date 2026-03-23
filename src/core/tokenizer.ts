@@ -1,4 +1,4 @@
-import { Token } from "@/types";
+import { Token } from "@/types/index.js";
 export function* tokenizer(exp: string): Generator<Token, void, undefined> {
 
   let i = 0;

@@ -1,5 +1,5 @@
 
-import { UtilitiesModule, FormattableNumber } from "../types";
+import { UtilitiesModule, FormattableNumber } from "@/types/index.js";
 
 export const utilities: UtilitiesModule = (function() {
   function formatNumber(value: FormattableNumber): string | number {

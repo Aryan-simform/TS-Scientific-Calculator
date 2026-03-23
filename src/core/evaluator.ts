@@ -1,5 +1,5 @@
-import type { Token, UnaryFunction, Constant, IBasicOperations } from "@/types";
-import { utilities } from "@/utils/utilities";
+import type { Token, UnaryFunction, Constant, IBasicOperations } from "@/types/index.js";
+import { utilities } from "@/utils/utilities.js";
 const constants: Record<Constant, number> = {
   pi: Math.PI,
   e: Math.E,

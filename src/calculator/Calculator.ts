@@ -1,10 +1,10 @@
-import { BasicOperations } from "@/calculator/operations";
-import type { CalculatorState, Operator, Parenthesis } from "@/types";
-import { tokenizer } from "@/core/tokenizer";
-import { parse } from "@/core/parser";
-import { evaluate } from "@/core/evaluator";
-import { history } from "@/history/history";
-import { utilities } from "@/utils/utilities";
+import { BasicOperations } from "@/calculator/operations.js";
+import type { CalculatorState, Operator, Parenthesis } from "@/types/index.js";
+import { tokenizer } from "@/core/tokenizer.js";
+import { parse } from "@/core/parser.js";
+import { evaluate } from "@/core/evaluator.js";
+import { history } from "@/history/history.js";
+import { utilities } from "@/utils/utilities.js";
 type AtomFinder = (expr: string, end: number) => number;
 
 const findParenStart: AtomFinder = (expr, end) => {

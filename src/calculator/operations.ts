@@ -1,4 +1,4 @@
-import type { IBasicOperations } from "@/types";
+import type { IBasicOperations } from "@/types/index.js";
 
 export const BasicOperations = function(
   this: IBasicOperations

@@ -1,4 +1,4 @@
-import type { Token, PrecedenceMap, AssociativityMap, UnaryFunction, Constant } from "@/types";
+import type { Token, PrecedenceMap, AssociativityMap, UnaryFunction, Constant } from "@/types/index.js";
 
 type Handler = (token: Token) => void;
 

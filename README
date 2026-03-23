@@ -1,0 +1,268 @@
+# 🧮 TypeScript Scientific Calculator
+
+A fully responsive, expression-based Scientific Calculator built from scratch in **TypeScript** — migrated from a vanilla JS project with strict type safety, modular architecture, and clean design patterns.
+
+---
+
+## Screenshots
+
+### Light Theme
+![Light Theme Screenshot](images/screenshot-light.png)
+> _Replace with actual screenshot_
+
+### Dark Theme
+![Dark Theme Screenshot](images/screenshot-dark.png)
+> _Replace with actual screenshot_
+
+### Scientific Functions
+![Scientific Functions Screenshot](images/screenshot-scientific.png)
+> _Replace with actual screenshot_
+
+---
+
+## ✨ Features
+
+### Basic Operations
+- Addition `+`, Subtraction `-`, Multiplication `*`, Division `/`
+- Modulus `%`, Power `^`, Parentheses `( )`
+
+### Scientific Functions
+- `sin(x)`, `cos(x)`, `tan(x)`
+- `log(x)` (base-10), `ln(x)` (natural log)
+- `sqrt(x)`, Factorial `n!`
+- Constants `π` and `e`
+
+### Extra Functionality
+- Full expression evaluation with correct operator precedence
+- Unary minus handling (`-3^2`)
+- Toggle sign `+/-`, Reciprocal `1/x`
+- Keyboard input support
+- Calculation history with localStorage persistence
+- Dark / Light theme toggle
+- Responsive design for mobile and desktop
+
+---
+
+## 🏗️ Architecture
+
+```
+src/
+├── types/
+│   └── index.ts          # All shared types and interfaces
+├── utils/
+│   └── utilities.ts      # IIFE module — formatNumber, factorial
+├── history/
+│   └── history.ts        # Closure-based history with localStorage
+├── core/
+│   ├── tokenizer.ts      # Generator-based tokenizer
+│   ├── parser.ts         # Infix → Postfix (Shunting Yard Algorithm)
+│   └── evaluator.ts      # Postfix evaluator with dependency injection
+├── calculator/
+│   ├── Calculator.ts     # Main Calculator class
+│   └── operations.ts     # Prototype-based arithmetic operations
+├── ui/
+│   └── ui.ts             # DOM interaction, event delegation
+└── main.ts               # Entry point
+```
+
+### Expression Pipeline
+
+```
+User Input
+  → Tokenizer (Generator)
+  → Parser    (Infix → Postfix)
+  → Evaluator (Postfix → Result)
+  → Display
+```
+
+---
+
+## 🧠 Core Concepts Used
+
+### TypeScript
+- Discriminated union types (`Token`)
+- Type guards (`val is Constant`, `v is UnaryFunction`)
+- Generic DOM helper (`getElement<T extends HTMLElement>`)
+- Strict null checks — every `pop()` and `at(-1)` narrowed
+- `noUncheckedIndexedAccess` — array access safety enforced
+- Interface implementation and declaration merging
+- `Record<K, V>` for exhaustive dispatch tables
+- Dependency injection in evaluator
+
+### JavaScript Patterns (typed)
+- **IIFE** — `utilities` module with private state
+- **Closure** — `createHistory()` with private `hist` array
+- **Prototype** — `BasicOperations` constructor function
+- **Generator** — `tokenizer*` for lazy token streaming
+- **Strategy Pattern** — `AtomFinder` for `replaceLastAtom`
+- **Dispatch Table** — `handlers`, `actions`, `binaryOps` maps
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+- Node.js `>= 16`
+- npm
+
+### Installation
+
+```bash
+# Clone the repository
+git clone https://github.com/Aryan-simform/TS-Scientific-Calculator.git
+
+# Navigate into the project
+cd TS-Scientific-Calculator
+
+# Install dependencies
+npm install
+```
+
+### Running Locally — Two Modes
+
+---
+
+#### Mode 1 — Native `tsc` (no bundler)
+
+Uses `tsc` + `tsc-alias` to compile TypeScript and rewrite `@/` path aliases. Outputs native ES modules.
+
+**Requirements:**
+- `"type": "module"` in `package.json`
+- `"module": "Node16"` and `"moduleResolution": "Node16"` in `tsconfig.json`
+- All local imports must use `.js` extensions (e.g. `import ... from "@/types/index.js"`)
+- Must be served via a local server — ES modules are blocked on `file://`
+
+**`public/index.html` script tag:**
+```html
+<!-- type="module" is required for ES modules to work in the browser -->
+<script type="module" src="../dist/main.js"></script>
+```
+
+```bash
+# Build
+npm run build
+
+# Build in watch mode
+npm run dev
+```
+
+Then serve with VS Code Live Server:
+1. Install the **Live Server** extension in VS Code
+2. Right-click `public/index.html`
+3. Click **Open with Live Server**
+
+Or serve from terminal:
+```bash
+npx serve public
+```
+
+---
+
+#### Mode 2 — esbuild (recommended)
+
+Uses esbuild to bundle everything into a single `dist/main.js`. No module issues, no extension requirements, works by opening `index.html` directly.
+
+**Requirements:**
+- Nothing extra — esbuild handles `@/` aliases and bundling in one command
+
+**`public/index.html` script tag:**
+```html
+<!-- no type="module" needed — esbuild outputs a single bundled file -->
+<script src="dist/main.js"></script>
+```
+
+```bash
+# Build once
+npm run build-esbuild
+
+# Build in watch mode (rebuilds on every file save)
+npm run dev-esbuild
+```
+
+Then open `public/index.html` directly in your browser or use Live Server. No server required.
+
+---
+
+#### Comparison
+
+| | `tsc` mode | esbuild mode |
+|---|---|---|
+| Output | Multiple ES module files | Single bundled file |
+| `@/` aliases | via `tsc-alias` | via `--alias` flag |
+| Needs a server | ✅ yes | ❌ no |
+| `.js` extensions required | ✅ yes | ❌ no |
+| Build speed | slower | faster |
+| `tsconfig.json` changes | required | none |
+
+---
+
+## ⌨️ Keyboard Support
+
+| Key | Action |
+|---|---|
+| `0–9`, `.` | Input number |
+| `+` `-` `*` `/` `^` | Operators |
+| `(` `)` | Parentheses |
+| `Enter` | Calculate `=` |
+| `Backspace` | Delete last character |
+| `C` | Clear all |
+
+---
+
+## 📐 Example Expressions
+
+```
+sin(30)
+sqrt(16) + 2^3
+5! + ln(e)
+(2 + 3) * 4
+-3^2
+log(1000)
+pi * 2
+```
+
+---
+
+## 🛠 Tech Stack
+
+- **TypeScript** (strict mode)
+- **HTML5** + **CSS3** (CSS variables, responsive grid)
+- **esbuild** (optional bundler) or **tsc + tsc-alias** (no bundler)
+- No external runtime libraries
+
+---
+
+## ⚙️ tsconfig Highlights
+
+```json
+{
+  "strict": true,
+  "noUncheckedIndexedAccess": true,
+  "exactOptionalPropertyTypes": true,
+  "noImplicitOverride": true,
+  "noUnusedLocals": true,
+  "noUnusedParameters": true
+}
+```
+
+---
+
+## 📋 Known Limitations / Future Work
+
+- Implicit multiplication (`2sin(30)`, `2π`) not supported
+- No degree / radian toggle
+- No memory functions (`M+`, `MR`, `MC`)
+- No AST-based evaluator
+- Precision rounding strategy not implemented
+
+---
+
+## 📁 Related
+
+- Original JS version: [JS-Scientific-Calculator](https://github.com/Aryan-simform/JS-Scientific-Calculator)
+
+---
+
+## 👤 Author
+
+**Aryan** — [@Aryan-simform](https://github.com/Aryan-simform)

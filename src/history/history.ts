@@ -1,4 +1,4 @@
-import type { HistoryManager, HistoryEntry } from "@/types";
+import type { HistoryManager, HistoryEntry } from "@/types/index.js";
 
 const STORAGE_KEY = "calculationHistory"; // define once at top of file
 function createHistroy(): HistoryManager {

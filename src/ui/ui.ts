@@ -1,6 +1,6 @@
-import { Calculator } from "@/calculator/Calculator";
-import { history } from "@/history/history";
-import type { ButtonAction, CalcUIElements, Operator, Parenthesis, ScientificOp } from "@/types";
+import { Calculator } from "@/calculator/Calculator.js";
+import { history } from "@/history/history.js";
+import type { ButtonAction, CalcUIElements, Operator, Parenthesis, ScientificOp } from "@/types/index.js";
 
 export function initUI(calc: Calculator): void {
 
