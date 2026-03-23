@@ -1,52 +1,62 @@
-import { Token } from "@/types/index.js";
+import type { Token } from "@/types/index.js";
+
+const isDigit = (c: string): boolean => c >= "0" && c <= "9";
+const isAlpha = (c: string): boolean => (c >= "a" && c <= "z") || (c >= "A" && c <= "Z");
+const isNumberChar = (c: string): boolean => isDigit(c) || c === ".";
+
+type Collector = (peek: () => string | undefined, advance: () => string | undefined) => string;
+
+const collectNumber: Collector = (peek, advance) => {
+  let value = "";
+  while (true) {
+    const c = peek();
+    if (!c || !isNumberChar(c)) break;
+    value += advance();
+  }
+  return value;
+};
+
+const collectWord: Collector = (peek, advance) => {
+  let value = "";
+  while (true) {
+    const c = peek();
+    if (!c || !isAlpha(c)) break;
+    value += advance();
+  }
+  return value;
+};
+
+type TokenFactory = (
+  peek: () => string | undefined,
+  advance: () => string | undefined
+) => Token;
+
+const tokenFactories: Array<[(c: string) => boolean, TokenFactory]> = [
+  [
+    isNumberChar,
+    (peek, advance) => ({ type: "number", value: collectNumber(peek, advance) }),
+  ],
+  [
+    isAlpha,
+    (peek, advance) => ({ type: "identifier", value: collectWord(peek, advance).toLowerCase() }),
+  ],
+  [
+    () => true, // fallthrough — single char operator
+    (_peek, advance) => ({ type: "operator", value: advance()! }),
+  ],
+];
+
 export function* tokenizer(exp: string): Generator<Token, void, undefined> {
-
   let i = 0;
-  const isDigit = (c: string) => c >= "0" && c <= "9";
-  const isAlpha = (c: string) =>
-    (c >= "a" && c <= "z") || (c >= "A" && c <= "Z");
-
-  const isNumberChar = (c: string) => isDigit(c) || c === ".";
-  const peek = () => exp[i];          // string | undefined
-  const advance = () => exp[i++];     // string | undefined
+  const peek = (): string | undefined => exp[i];
+  const advance = (): string | undefined => exp[i++];
 
   while (i < exp.length) {
     const char = peek();
     if (!char) break;
+    if (char === " ") { advance(); continue; }
 
-    if (char === " ") {
-      advance();
-      continue;
-    }
-
-    if (isNumberChar(char)) {
-      let value = "";
-
-      while (true) {
-        const c = peek();
-        if (!c || !isNumberChar(c)) break;
-
-        value += advance();
-      }
-
-      yield { type: "number", value };
-      continue;
-    }
-
-    if (isAlpha(char)) {
-      let value = "";
-
-      while (true) {
-        const c = peek();
-        if (!c || !isAlpha(c)) break;
-
-        value += advance();
-      }
-
-      yield { type: "identifier", value: value.toLowerCase() };
-      continue;
-    }
-    // safe: char is already confirmed non-null by the peek() + if(!char) break above
-    yield { type: "operator", value: advance()! };
+    const factory = tokenFactories.find(([test]) => test(char));
+    if (factory) yield factory[1](peek, advance);
   }
 }
